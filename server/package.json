@@ -1,0 +1,17 @@
+{
+  "name": "cinebook-server",
+  "version": "1.0.0",
+  "description": "CineBook backend API (Express, in-memory store mirrored to JSON)",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch-path=src --watch-path=server.js server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "stripe": "^22.6.1"
+  }
+}

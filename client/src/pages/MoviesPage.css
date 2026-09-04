@@ -1,0 +1,21 @@
+.page-title {
+  font-size: 26px;
+  margin: 8px 0 20px;
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 480px) {
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+}

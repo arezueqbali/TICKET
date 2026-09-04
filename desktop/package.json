@@ -1,0 +1,42 @@
+{
+  "name": "cinebook-desktop",
+  "version": "1.0.0",
+  "description": "CineBook — movie ticket booking, packaged as a desktop app",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win --x64",
+    "dist:mac": "electron-builder --mac --arm64"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.cinebook.app",
+    "productName": "CineBook",
+    "asar": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "server/**/*",
+      "client/**/*",
+      "!server/package-lock.json"
+    ],
+    "win": {
+      "target": ["portable"]
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.entertainment"
+    }
+  }
+}
