@@ -1,4 +1,8 @@
-const BASE_URL = 'http://localhost:4000/api'
+// In dev (`vite`), the API runs separately on :4000. In every built/deployed form
+// (Vercel, the Electron desktop app, or a plain `vite build` served by the Express
+// server itself) the API is same-origin under /api, so a relative URL is correct
+// and there's nothing to configure per-environment.
+const BASE_URL = import.meta.env.DEV ? 'http://localhost:4000/api' : '/api'
 
 /**
  * Wraps fetch, parses JSON, and throws an ApiError with the parsed body

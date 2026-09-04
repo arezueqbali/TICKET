@@ -14,6 +14,9 @@ release/
 # Data (server's in-memory store mirror — seed/demo data regenerates on first run)
 server/data.json
 
+# Vercel
+.vercel
+
 # OS / editor
 .DS_Store
 *.log

@@ -15,7 +15,15 @@ import { fileURLToPath } from 'node:url';
 import { buildSeedData } from './seedData.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_FILE = path.join(__dirname, '..', 'data.json');
+// On Vercel the deployed filesystem is read-only except /tmp, and /tmp is only
+// shared across requests hitting the *same* warm serverless instance — it is not
+// durable storage. Locally (and in the Electron desktop build) this file lives
+// next to the server and really does persist bookings across restarts, per
+// SPEC.md. On Vercel, treat it as best-effort: it survives while an instance
+// stays warm, and resets (back to seed data) whenever a fresh instance cold-starts.
+const DATA_FILE = process.env.VERCEL
+  ? path.join('/tmp', 'cinebook-data.json')
+  : path.join(__dirname, '..', 'data.json');
 
 const REF_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -70,20 +78,26 @@ const bookingsByReference = new Map(state.bookings.map((b) => [b.reference, b]))
 const usedPaymentIntentIds = new Set(state.bookings.map((b) => b.paymentIntentId).filter(Boolean));
 
 function persist() {
-  fs.writeFileSync(
-    DATA_FILE,
-    JSON.stringify(
-      {
-        movies: state.movies,
-        cinemas: state.cinemas,
-        showtimes: state.showtimes,
-        seatsByShowtime: state.seatsByShowtime,
-        bookings: state.bookings,
-      },
-      null,
-      2
-    )
-  );
+  // Best-effort: never let a filesystem hiccup (e.g. a stricter serverless sandbox)
+  // take down a request that already succeeded in memory.
+  try {
+    fs.writeFileSync(
+      DATA_FILE,
+      JSON.stringify(
+        {
+          movies: state.movies,
+          cinemas: state.cinemas,
+          showtimes: state.showtimes,
+          seatsByShowtime: state.seatsByShowtime,
+          bookings: state.bookings,
+        },
+        null,
+        2
+      )
+    );
+  } catch (err) {
+    console.warn('[store] failed to persist data.json:', err.message);
+  }
 }
 
 // Write the seed (or reloaded) state out immediately so data.json always reflects

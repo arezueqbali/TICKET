@@ -1,0 +1,12 @@
+{
+  "name": "cinebook",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Root package for the Vercel deployment — declares the dependencies server/src/app.js needs so Vercel's serverless bundler (api/[...path].js) can resolve them. Not used for local dev; see client/ and server/ for that.",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "stripe": "^22.6.1"
+  }
+}
